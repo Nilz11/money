@@ -1,3 +1,5 @@
+![Build](https://travis-ci.org/Nilz11/money.svg?branch=master)
+
 A real world implementation of an extendable Money object using integers of smallest currency unit as calculation.
 
 This library was created because other existing solutions had one or more of the following drawbacks:
