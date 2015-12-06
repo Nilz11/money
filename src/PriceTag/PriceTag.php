@@ -2,15 +2,14 @@
 
 namespace Nilz\Money\PriceTag;
 
+use Nilz\Money\Currency\CurrencyInterface;
 use Nilz\Money\Exception\TaxMismatchException;
 use Nilz\Money\MoneyInterface;
 
 /**
  * Class PriceTag
- *
  * A price tag is a combination of net and gross price. The property tax percentage indicates the tax between net and gross price.
  * If no tax is needed, put tax percentage to 0.0 or use money object directly.
- *
  * @author Nilz
  */
 class PriceTag
@@ -36,7 +35,7 @@ class PriceTag
     /**
      * @param MoneyInterface $netPrice
      * @param MoneyInterface $grossPrice
-     * @param float $taxPercentage
+     * @param float          $taxPercentage
      */
     public function __construct(MoneyInterface $netPrice, MoneyInterface $grossPrice, $taxPercentage)
     {
@@ -152,6 +151,38 @@ class PriceTag
         $grossPrice = $this->getGrossPrice()->divide($factor, $mode);
 
         return $this->newPriceTag($netPrice, $grossPrice);
+    }
+
+    /**
+     * Converts price tag to currency
+     *
+     * @param float             $ratio
+     * @param CurrencyInterface $currency
+     * @param int               $mode
+     *
+     * @return PriceTag
+     */
+    public function convertTo($ratio, CurrencyInterface $currency, $mode = PHP_ROUND_HALF_UP)
+    {
+        $netPrice = $this->getNetPrice()->convertTo($ratio, $currency, $mode);
+
+        $grossPrice = $this->getGrossPrice()->convertTo($ratio, $currency, $mode);
+
+        return $this->newPriceTag($netPrice, $grossPrice);
+    }
+
+    /**
+     * Compares price tag
+     *
+     * @param PriceTag $priceTag
+     *
+     * @return int
+     */
+    public function compareTo(PriceTag $priceTag)
+    {
+        $this->assertTaxPercentage($priceTag);
+
+        return $this->getNetPrice()->compareTo($priceTag->getNetPrice());
     }
 
     /**
