@@ -137,7 +137,7 @@ class Money implements MoneyInterface
     /**
      * @inheritdoc
      */
-    public function convertTo($ratio, $currency, $mode = PHP_ROUND_HALF_UP)
+    public function convertTo($ratio, CurrencyInterface $currency, $mode = PHP_ROUND_HALF_UP)
     {
         $product = $this->round($this->amount * $ratio, $mode);
 

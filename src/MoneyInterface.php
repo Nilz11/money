@@ -86,7 +86,7 @@ interface MoneyInterface
      *
      * @return static
      */
-    public function convertTo($ratio, $currency, $mode = PHP_ROUND_HALF_UP);
+    public function convertTo($ratio, CurrencyInterface $currency, $mode = PHP_ROUND_HALF_UP);
 
     /**
      * Compares money object to given money object
