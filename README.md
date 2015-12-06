@@ -1,4 +1,4 @@
-![Build](https://travis-ci.org/Nilz11/money.svg?branch=master)
+[<img src="https://travis-ci.org/Nilz11/money.svg?branch=master">](https://travis-ci.org/Nilz11/money)
 
 A real world implementation of an extendable Money object using integers of smallest currency unit as calculation.
 
