@@ -14,7 +14,7 @@ use Nilz\Money\Exception\CurrencyMismatchException;
  *
  * @author Nilz
  */
-class Money
+class Money implements MoneyInterface
 {
     /**
      * @var integer
@@ -59,9 +59,7 @@ class Money
     }
 
     /**
-     * Gets raw amount in smallest unit representation of currency, e.g. 420 (eurocents)
-     *
-     * @return int
+     * @inheritdoc
      */
     public function getAmount()
     {
@@ -69,9 +67,7 @@ class Money
     }
 
     /**
-     * Gets amount in the default unit representation of the currency, e.g. euros instead of eurocents
-     *
-     * @return float
+     * @inheritdoc
      */
     public function getDefaultUnitAmount()
     {
@@ -79,11 +75,7 @@ class Money
     }
 
     /**
-     * Returns formatted amount using the given locale. Uses number formatter of php intl extension, e.g. 4,20 €
-     *
-     * @param null|string $locale e.g. en_CA, defaults to Locale::getDefault()
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getFormattedAmount($locale = null)
     {
@@ -93,8 +85,7 @@ class Money
     }
 
     /**
-     * Gets currency of money object
-     * @return CurrencyInterface
+     * @inheritdoc
      */
     public function getCurrency()
     {
@@ -102,13 +93,9 @@ class Money
     }
 
     /**
-     * Adds money to the money object
-     *
-     * @param Money $summand
-     *
-     * @return Money
+     * @inheritdoc
      */
-    public function add(Money $summand)
+    public function add(MoneyInterface $summand)
     {
         $this->assertSameCurrency($summand);
 
@@ -118,13 +105,9 @@ class Money
     }
 
     /**
-     * Subtracts money from money object
-     *
-     * @param Money $subtrahend
-     *
-     * @return Money
+     * @inheritdoc
      */
-    public function subtract(Money $subtrahend)
+    public function subtract(MoneyInterface $subtrahend)
     {
         $this->assertSameCurrency($subtrahend);
 
@@ -134,12 +117,7 @@ class Money
     }
 
     /**
-     * Multiplies money object by given factor
-     *
-     * @param float   $factor
-     * @param integer $mode
-     *
-     * @return Money
+     * @inheritdoc
      */
     public function multiply($factor, $mode = PHP_ROUND_HALF_UP)
     {
@@ -147,12 +125,7 @@ class Money
     }
 
     /**
-     * Divides money object by given divisor
-     *
-     * @param float   $divisor
-     * @param integer $mode
-     *
-     * @return Money
+     * @inheritdoc
      */
     public function divide($divisor, $mode = PHP_ROUND_HALF_UP)
     {
@@ -162,13 +135,7 @@ class Money
     }
 
     /**
-     * Converts money object to object with different currency
-     *
-     * @param integer           $ratio
-     * @param CurrencyInterface $currency
-     * @param integer           $mode
-     *
-     * @return static
+     * @inheritdoc
      */
     public function convertTo($ratio, $currency, $mode = PHP_ROUND_HALF_UP)
     {
@@ -178,16 +145,9 @@ class Money
     }
 
     /**
-     * Compares money object to given money object
-     * Returns < 0: Amount of object is smaller than given object
-     * Returns 0: Amount is the same
-     * Return > 0: Amount of object is bigger than given object
-     *
-     * @param Money $money
-     *
-     * @return integer -|0|+
+     * @inheritdoc
      */
-    public function compareTo(Money $money)
+    public function compareTo(MoneyInterface $money)
     {
         $this->assertSameCurrency($money);
 
@@ -195,11 +155,7 @@ class Money
     }
 
     /**
-     * Returns new money object with same currency but given amount
-     *
-     * @param integer $amount
-     *
-     * @return Money
+     * @inheritdoc
      */
     public function newMoney($amount)
     {
@@ -232,13 +188,9 @@ class Money
     }
 
     /**
-     * Asserts if the given money object has the same currency as the object itself
-     *
-     * @param Money $money
-     *
-     * @throws CurrencyMismatchException
+     * @inheritdoc
      */
-    public function assertSameCurrency(Money $money)
+    public function assertSameCurrency(MoneyInterface $money)
     {
         if (!$this->isSameCurrency($money)) {
             throw new CurrencyMismatchException(sprintf('Currency %s does not match %s of other object.', $this->getCurrency()->getAlpha3(), $money->getCurrency()->getAlpha3()));
@@ -246,13 +198,9 @@ class Money
     }
 
     /**
-     * If the currency is the same as the currency of money
-     *
-     * @param Money $money
-     *
-     * @return bool
+     * @inheritdoc
      */
-    public function isSameCurrency(Money $money)
+    public function isSameCurrency(MoneyInterface $money)
     {
         if ($this->getCurrency()->getAlpha3() !== $money->getCurrency()->getAlpha3()) {
             return false;
