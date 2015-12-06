@@ -17,13 +17,13 @@ class CurrencyPriceTag
      * Base price tag in base currency
      * @var PriceTag
      */
-    protected $basePriceTag;
+    protected $baseCurrency;
 
     /**
      * Display price tag in display currency
      * @var PriceTag
      */
-    protected $displayPriceTag;
+    protected $displayCurrency;
 
     /**
      * Exchange rate between base price tag and display price tag
@@ -32,16 +32,16 @@ class CurrencyPriceTag
     protected $exchangeRate;
 
     /**
-     * @param PriceTag $basePriceTag
-     * @param PriceTag $displayPriceTag
+     * @param PriceTag $baseCurrency
+     * @param PriceTag $displayCurrency
      * @param integer  $exchangeRate
      */
-    public function __construct(PriceTag $basePriceTag, PriceTag $displayPriceTag, $exchangeRate)
+    public function __construct(PriceTag $baseCurrency, PriceTag $displayCurrency, $exchangeRate)
     {
-        $basePriceTag->assertTaxPercentage($displayPriceTag);
+        $baseCurrency->assertTaxPercentage($displayCurrency);
 
-        $this->basePriceTag = $basePriceTag;
-        $this->displayPriceTag = $displayPriceTag;
+        $this->baseCurrency = $baseCurrency;
+        $this->displayCurrency = $displayCurrency;
 
         $this->exchangeRate = $exchangeRate;
     }
@@ -49,17 +49,17 @@ class CurrencyPriceTag
     /**
      * @return PriceTag
      */
-    public function getBasePriceTag()
+    public function getBaseCurrency()
     {
-        return $this->basePriceTag;
+        return $this->baseCurrency;
     }
 
     /**
      * @return PriceTag
      */
-    public function getDisplayPriceTag()
+    public function getDisplayCurrency()
     {
-        return $this->displayPriceTag;
+        return $this->displayCurrency;
     }
 
     /**
@@ -81,11 +81,11 @@ class CurrencyPriceTag
     {
         $this->assertExchangeRate($summand);
 
-        $basePriceTag = $this->getBasePriceTag()->add($summand->getBasePriceTag());
+        $baseCurrency = $this->getBaseCurrency()->add($summand->getBaseCurrency());
 
-        $displayPriceTag = $this->getDisplayPriceTag()->add($summand->getDisplayPriceTag());
+        $displayCurrency = $this->getDisplayCurrency()->add($summand->getdisplayCurrency());
 
-        return $this->newCurrencyPriceTag($basePriceTag, $displayPriceTag);
+        return $this->newCurrencyPriceTag($baseCurrency, $displayCurrency);
     }
 
     /**
@@ -99,11 +99,11 @@ class CurrencyPriceTag
     {
         $this->assertExchangeRate($subtrahend);
 
-        $basePriceTag = $this->getBasePriceTag()->subtract($subtrahend->getBasePriceTag());
+        $baseCurrency = $this->getBaseCurrency()->subtract($subtrahend->getBaseCurrency());
 
-        $displayPriceTag = $this->getDisplayPriceTag()->subtract($subtrahend->getDisplayPriceTag());
+        $displayCurrency = $this->getDisplayCurrency()->subtract($subtrahend->getdisplayCurrency());
 
-        return $this->newCurrencyPriceTag($basePriceTag, $displayPriceTag);
+        return $this->newCurrencyPriceTag($baseCurrency, $displayCurrency);
     }
 
     /**
@@ -116,11 +116,11 @@ class CurrencyPriceTag
      */
     public function multiply($factor, $mode = PHP_ROUND_HALF_UP)
     {
-        $basePriceTag = $this->getBasePriceTag()->multiply($factor, $mode);
+        $baseCurrency = $this->getBaseCurrency()->multiply($factor, $mode);
 
-        $displayPriceTag = $this->getBasePriceTag()->multiply($factor, $mode);
+        $displayCurrency = $this->getDisplayCurrency()->multiply($factor, $mode);
 
-        return $this->newCurrencyPriceTag($basePriceTag, $displayPriceTag);
+        return $this->newCurrencyPriceTag($baseCurrency, $displayCurrency);
     }
 
     /**
@@ -131,13 +131,13 @@ class CurrencyPriceTag
      *
      * @return CurrencyPriceTag
      */
-    public function divice($divisor, $mode = PHP_ROUND_HALF_UP)
+    public function divide($divisor, $mode = PHP_ROUND_HALF_UP)
     {
-        $basePriceTag = $this->getBasePriceTag()->divide($divisor, $mode);
+        $baseCurrency = $this->getBaseCurrency()->divide($divisor, $mode);
 
-        $displayPriceTag = $this->getBasePriceTag()->divide($divisor, $mode);
+        $displayCurrency = $this->getDisplayCurrency()->divide($divisor, $mode);
 
-        return $this->newCurrencyPriceTag($basePriceTag, $displayPriceTag);
+        return $this->newCurrencyPriceTag($baseCurrency, $displayCurrency);
     }
 
     /**
@@ -153,14 +153,14 @@ class CurrencyPriceTag
     /**
      * Returns new static of currency price tag but with same exchange rate
      *
-     * @param PriceTag $basePriceTag
-     * @param PriceTag $displayPriceTag
+     * @param PriceTag $baseCurrency
+     * @param PriceTag $displayCurrency
      *
      * @return static
      */
-    public function newCurrencyPriceTag(PriceTag $basePriceTag, PriceTag $displayPriceTag)
+    public function newCurrencyPriceTag(PriceTag $baseCurrency, PriceTag $displayCurrency)
     {
-        return new static($basePriceTag, $displayPriceTag, $this->exchangeRate);
+        return new static($baseCurrency, $displayCurrency, $this->exchangeRate);
     }
 
     /**
