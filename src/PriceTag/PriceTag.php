@@ -199,6 +199,16 @@ class PriceTag
     }
 
     /**
+     * Clones the price tag
+     * 
+     * @return PriceTag
+     */
+    public function __clone()
+    {
+        return $this->newPriceTag($this->netPrice, $this->grossPrice);
+    }
+
+    /**
      * Asserts equality of tax percentages
      *
      * @param PriceTag $priceTag
