@@ -22,7 +22,7 @@ class CurrencyPriceTag extends PriceTag
      * @param float          $taxPercentage
      * @param ExchangeRate   $exchangeRate
      */
-    public function __construct(MoneyInterface $netPrice, MoneyInterface $grossPrice, $taxPercentage, $baseCurrency, ExchangeRate $exchangeRate)
+    public function __construct(MoneyInterface $netPrice, MoneyInterface $grossPrice, $taxPercentage, ExchangeRate $exchangeRate)
     {
         parent::__construct($netPrice, $grossPrice, $taxPercentage);
 
