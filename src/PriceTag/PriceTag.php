@@ -207,7 +207,7 @@ class PriceTag
      */
     public function assertTaxPercentage(PriceTag $priceTag)
     {
-        if ($this->taxPercentage !== $priceTag->getTaxPercentage()) {
+        if ($this->taxPercentage != $priceTag->getTaxPercentage()) {
             throw new TaxMismatchException(sprintf('Tax percentage %i must match %i when adding or subtracting price tags', $this->taxPercentage, $priceTag->getTaxPercentage()));
         }
     }
