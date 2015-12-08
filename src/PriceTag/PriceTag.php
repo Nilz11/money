@@ -4,7 +4,7 @@ namespace Nilz\Money\PriceTag;
 
 use Nilz\Money\Currency\CurrencyInterface;
 use Nilz\Money\Exception\TaxMismatchException;
-use Nilz\Money\MoneyInterface;
+use Nilz\Money\Money;
 
 /**
  * Class PriceTag
@@ -16,13 +16,13 @@ class PriceTag
 {
     /**
      * Net price
-     * @var MoneyInterface
+     * @var Money
      */
     protected $netPrice;
 
     /**
      * Gross price
-     * @var MoneyInterface
+     * @var Money
      */
     protected $grossPrice;
 
@@ -33,11 +33,11 @@ class PriceTag
     protected $taxPercentage;
 
     /**
-     * @param MoneyInterface $netPrice
-     * @param MoneyInterface $grossPrice
+     * @param Money $netPrice
+     * @param Money $grossPrice
      * @param float          $taxPercentage
      */
-    public function __construct(MoneyInterface $netPrice, MoneyInterface $grossPrice, $taxPercentage)
+    public function __construct(Money $netPrice, Money $grossPrice, $taxPercentage)
     {
         $netPrice->assertSameCurrency($grossPrice);
 
@@ -49,7 +49,7 @@ class PriceTag
 
     /**
      * Gets net price
-     * @return MoneyInterface
+     * @return Money
      */
     public function getNetPrice()
     {
@@ -58,7 +58,7 @@ class PriceTag
 
     /**
      * Gets gross price
-     * @return MoneyInterface
+     * @return Money
      */
     public function getGrossPrice()
     {
@@ -67,7 +67,7 @@ class PriceTag
 
     /**
      * Gets tax value between net and gross price
-     * @return MoneyInterface
+     * @return Money
      */
     public function getTaxValue()
     {
@@ -188,24 +188,14 @@ class PriceTag
     /**
      * Returns new price tag with net and gross price but keeps tax percentage
      *
-     * @param MoneyInterface $netPrice
-     * @param MoneyInterface $grossPrice
+     * @param Money $netPrice
+     * @param Money $grossPrice
      *
      * @return static
      */
-    public function newPriceTag(MoneyInterface $netPrice, MoneyInterface $grossPrice)
+    public function newPriceTag(Money $netPrice, Money $grossPrice)
     {
         return new static($netPrice, $grossPrice, $this->taxPercentage);
-    }
-
-    /**
-     * Clones the price tag
-     * 
-     * @return PriceTag
-     */
-    public function __clone()
-    {
-        return $this->newPriceTag($this->netPrice, $this->grossPrice);
     }
 
     /**

@@ -14,7 +14,7 @@ use Nilz\Money\Exception\CurrencyMismatchException;
  *
  * @author Nilz
  */
-class Money implements MoneyInterface
+class Money
 {
     /**
      * @var integer
@@ -95,7 +95,7 @@ class Money implements MoneyInterface
     /**
      * @inheritdoc
      */
-    public function add(MoneyInterface $summand)
+    public function add(Money $summand)
     {
         $this->assertSameCurrency($summand);
 
@@ -107,7 +107,7 @@ class Money implements MoneyInterface
     /**
      * @inheritdoc
      */
-    public function subtract(MoneyInterface $subtrahend)
+    public function subtract(Money $subtrahend)
     {
         $this->assertSameCurrency($subtrahend);
 
@@ -147,7 +147,7 @@ class Money implements MoneyInterface
     /**
      * @inheritdoc
      */
-    public function compareTo(MoneyInterface $money)
+    public function compareTo(Money $money)
     {
         $this->assertSameCurrency($money);
 
@@ -190,7 +190,7 @@ class Money implements MoneyInterface
     /**
      * @inheritdoc
      */
-    public function assertSameCurrency(MoneyInterface $money)
+    public function assertSameCurrency(Money $money)
     {
         if (!$this->isSameCurrency($money)) {
             throw new CurrencyMismatchException(sprintf('Currency %s does not match %s of other object.', $this->getCurrency()->getAlpha3(), $money->getCurrency()->getAlpha3()));
@@ -200,7 +200,7 @@ class Money implements MoneyInterface
     /**
      * @inheritdoc
      */
-    public function isSameCurrency(MoneyInterface $money)
+    public function isSameCurrency(Money $money)
     {
         if ($this->getCurrency()->getAlpha3() !== $money->getCurrency()->getAlpha3()) {
             return false;
