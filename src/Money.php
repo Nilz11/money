@@ -139,7 +139,9 @@ class Money
      */
     public function convertTo($ratio, CurrencyInterface $currency, $mode = PHP_ROUND_HALF_UP)
     {
-        $product = $this->round($this->amount * $ratio, $mode);
+        $currencyFactor = $currency->getFactorOfSmallestUnit() / $this->currency->getFactorOfSmallestUnit();
+
+        $product = $this->round($this->amount * $ratio * $currencyFactor, $mode);
 
         return new static($product, $currency);
     }

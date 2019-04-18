@@ -145,6 +145,9 @@ class MoneyTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'convert to USD' => [new Money(1451, new ISO4217Currency('EUR')), 1.0567, 1533, 'USD'],
+            //Test that factor of currency is adjusted properly
+            'convert CLP to EUR' => [new Money(	2333443, new ISO4217Currency('CLP')), (1.0 / 747.0), 312375, 'EUR'],
+            'convert EUR to CLP' => [new Money(	312375, new ISO4217Currency('EUR')), 747.0, 2333441, 'CLP'],
         ];
     }
 
