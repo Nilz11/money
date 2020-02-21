@@ -77,11 +77,21 @@ class Money
     /**
      * @inheritdoc
      */
-    public function getFormattedAmount($locale = null)
+    public function getFormattedAmount($locale = null, $hideFractionDigits = false)
     {
         $convertedAmount = $this->getDefaultUnitAmount();
+        $formatter = $this->getCurrencyFormatter($locale);
 
-        return $this->getCurrencyFormatter($locale)->formatCurrency($convertedAmount, $this->getCurrency()->getAlpha3());
+        if ($hideFractionDigits) {
+            //We dont display cents if there arent any. Php does not support that out of box, because we dont want numbers like 820,1€
+            if ($this->getAmount() % 100 === 0) {
+                $formatter->setAttribute(\NumberFormatter::MAX_FRACTION_DIGITS, 0);
+            } else {
+                $formatter->setAttribute(\NumberFormatter::MAX_FRACTION_DIGITS, 2);
+            }
+        }
+
+        return $formatter->formatCurrency($convertedAmount, $this->getCurrency()->getAlpha3());
     }
 
     /**
