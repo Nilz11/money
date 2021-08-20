@@ -17,10 +17,10 @@ class MoneyTest extends \PHPUnit_Framework_TestCase
     public function getConstructionFailedAmount()
     {
         return [
-            'null amount'   => [null],
-            'float amount'  => [0.0],
+            'null amount' => [null],
+            'float amount' => [0.0],
             'string amount' => ['0.0'],
-            'bool amount'   => [true],
+            'bool amount' => [true],
         ];
     }
 
@@ -55,13 +55,13 @@ class MoneyTest extends \PHPUnit_Framework_TestCase
     public function getAddAndSubtractData()
     {
         return [
-            'test add'                 => [new Money(17, new ISO4217Currency('EUR')), new Money(37, new ISO4217Currency('EUR')), 54, 'add'],
-            'test add 2'               => [new Money(100, new ISO4217Currency('USD')), new Money(35, new ISO4217Currency('USD')), 135, 'add'],
-            'test add negative'        => [new Money(-100, new ISO4217Currency('USD')), new Money(35, new ISO4217Currency('USD')), -65, 'add'],
-            'test add negative 2'      => [new Money(-100, new ISO4217Currency('USD')), new Money(-35, new ISO4217Currency('USD')), -135, 'add'],
-            'test subtract'            => [new Money(17, new ISO4217Currency('EUR')), new Money(3, new ISO4217Currency('EUR')), 14, 'subtract'],
-            'test subtract 2'          => [new Money(17, new ISO4217Currency('EUR')), new Money(37, new ISO4217Currency('EUR')), -20, 'subtract'],
-            'test subtract negative'   => [new Money(-100, new ISO4217Currency('USD')), new Money(-123, new ISO4217Currency('USD')), 23, 'subtract'],
+            'test add' => [new Money(17, new ISO4217Currency('EUR')), new Money(37, new ISO4217Currency('EUR')), 54, 'add'],
+            'test add 2' => [new Money(100, new ISO4217Currency('USD')), new Money(35, new ISO4217Currency('USD')), 135, 'add'],
+            'test add negative' => [new Money(-100, new ISO4217Currency('USD')), new Money(35, new ISO4217Currency('USD')), -65, 'add'],
+            'test add negative 2' => [new Money(-100, new ISO4217Currency('USD')), new Money(-35, new ISO4217Currency('USD')), -135, 'add'],
+            'test subtract' => [new Money(17, new ISO4217Currency('EUR')), new Money(3, new ISO4217Currency('EUR')), 14, 'subtract'],
+            'test subtract 2' => [new Money(17, new ISO4217Currency('EUR')), new Money(37, new ISO4217Currency('EUR')), -20, 'subtract'],
+            'test subtract negative' => [new Money(-100, new ISO4217Currency('USD')), new Money(-123, new ISO4217Currency('USD')), 23, 'subtract'],
             'test subtract negative 2' => [new Money(-100, new ISO4217Currency('USD')), new Money(5678, new ISO4217Currency('USD')), -5778, 'subtract'],
         ];
     }
@@ -103,22 +103,26 @@ class MoneyTest extends \PHPUnit_Framework_TestCase
     public function getMultiplicationAndDivisionData()
     {
         return [
-            'test multiply'                         => [new Money(17, new ISO4217Currency('EUR')), 2, PHP_ROUND_HALF_UP, 34, 'EUR', 'multiply'],
-            'test multiply 2'                       => [new Money(17, new ISO4217Currency('EUR')), 1.234, PHP_ROUND_HALF_UP, 21, 'EUR', 'multiply'],
-            'test multiply negative'                => [new Money(17, new ISO4217Currency('USD')), -1.234, PHP_ROUND_HALF_UP, -21, 'USD', 'multiply'],
-            'test multiply negative 2'              => [new Money(-17, new ISO4217Currency('USD')), -1.234, PHP_ROUND_HALF_UP, 21, 'USD', 'multiply'],
-            'test multiply round down'              => [new Money(10, new ISO4217Currency('EUR')), 1.449, PHP_ROUND_HALF_UP, 14, 'EUR', 'multiply'],
-            'test multiply round up'                => [new Money(10, new ISO4217Currency('EUR')), 1.450, PHP_ROUND_HALF_UP, 15, 'EUR', 'multiply'],
-            'test multiply round down (half down)'  => [new Money(10, new ISO4217Currency('USD')), 1.450, PHP_ROUND_HALF_DOWN, 14, 'USD', 'multiply'],
-            'test multiply round up (half down)'    => [new Money(10, new ISO4217Currency('USD')), 1.451, PHP_ROUND_HALF_DOWN, 15, 'USD', 'multiply'],
-            'test divide'                           => [new Money(17, new ISO4217Currency('EUR')), 2, PHP_ROUND_HALF_UP, 9, 'EUR', 'divide'],
-            'test divide 2'                         => [new Money(17, new ISO4217Currency('EUR')), 1.234, PHP_ROUND_HALF_UP, 14, 'EUR', 'divide'],
-            'test divide negative'                  => [new Money(17, new ISO4217Currency('USD')), -1.234, PHP_ROUND_HALF_UP, -14, 'USD', 'divide'],
-            'test divide negative 2'                => [new Money(-17, new ISO4217Currency('USD')), -1.234, PHP_ROUND_HALF_UP, 14, 'USD', 'divide'],
-            'test divide round down'                => [new Money(1449, new ISO4217Currency('EUR')), 100, PHP_ROUND_HALF_UP, 14, 'EUR', 'divide'],
-            'test divide round up'                  => [new Money(1450, new ISO4217Currency('EUR')), 100, PHP_ROUND_HALF_UP, 15, 'EUR', 'divide'],
-            'test divide round down (half down)'    => [new Money(1450, new ISO4217Currency('USD')), 100, PHP_ROUND_HALF_DOWN, 14, 'USD', 'divide'],
-            'test divide round up (half down)'      => [new Money(1451, new ISO4217Currency('USD')), 100, PHP_ROUND_HALF_DOWN, 15, 'USD', 'divide'],
+            'test multiply' => [new Money(17, new ISO4217Currency('EUR')), 2, PHP_ROUND_HALF_UP, 34, 'EUR', 'multiply'],
+            'test multiply 2' => [new Money(17, new ISO4217Currency('EUR')), 1.234, PHP_ROUND_HALF_UP, 21, 'EUR', 'multiply'],
+            'test multiply negative' => [new Money(17, new ISO4217Currency('USD')), -1.234, PHP_ROUND_HALF_UP, -21, 'USD', 'multiply'],
+            'test multiply negative 2' => [new Money(-17, new ISO4217Currency('USD')), -1.234, PHP_ROUND_HALF_UP, 21, 'USD', 'multiply'],
+            'test multiply round down' => [new Money(10, new ISO4217Currency('EUR')), 1.449, PHP_ROUND_HALF_UP, 14, 'EUR', 'multiply'],
+            'test multiply round up' => [new Money(10, new ISO4217Currency('EUR')), 1.450, PHP_ROUND_HALF_UP, 15, 'EUR', 'multiply'],
+            'test multiply round down (half down)' => [new Money(10, new ISO4217Currency('USD')), 1.450, PHP_ROUND_HALF_DOWN, 14, 'USD', 'multiply'],
+            'test multiply round up (half down)' => [new Money(10, new ISO4217Currency('USD')), 1.451, PHP_ROUND_HALF_DOWN, 15, 'USD', 'multiply'],
+            'test multiply floor' => [new Money(10, new ISO4217Currency('USD')), 1.99, Money::ROUND_DOWN, 19, 'USD', 'multiply'],
+            'test multiply ceil' => [new Money(10, new ISO4217Currency('USD')), 1.91, Money::ROUND_UP, 20, 'USD', 'multiply'],
+            'test divide' => [new Money(17, new ISO4217Currency('EUR')), 2, PHP_ROUND_HALF_UP, 9, 'EUR', 'divide'],
+            'test divide 2' => [new Money(17, new ISO4217Currency('EUR')), 1.234, PHP_ROUND_HALF_UP, 14, 'EUR', 'divide'],
+            'test divide negative' => [new Money(17, new ISO4217Currency('USD')), -1.234, PHP_ROUND_HALF_UP, -14, 'USD', 'divide'],
+            'test divide negative 2' => [new Money(-17, new ISO4217Currency('USD')), -1.234, PHP_ROUND_HALF_UP, 14, 'USD', 'divide'],
+            'test divide round down' => [new Money(1449, new ISO4217Currency('EUR')), 100, PHP_ROUND_HALF_UP, 14, 'EUR', 'divide'],
+            'test divide round up' => [new Money(1450, new ISO4217Currency('EUR')), 100, PHP_ROUND_HALF_UP, 15, 'EUR', 'divide'],
+            'test divide round down (half down)' => [new Money(1450, new ISO4217Currency('USD')), 100, PHP_ROUND_HALF_DOWN, 14, 'USD', 'divide'],
+            'test divide round up (half down)' => [new Money(1451, new ISO4217Currency('USD')), 100, PHP_ROUND_HALF_DOWN, 15, 'USD', 'divide'],
+            'test divide floor' => [new Money(1499, new ISO4217Currency('USD')), 100, Money::ROUND_DOWN, 14, 'USD', 'divide'],
+            'test divide up' => [new Money(1401, new ISO4217Currency('USD')), 100, Money::ROUND_UP, 15, 'USD', 'divide'],
         ];
     }
 
@@ -146,8 +150,8 @@ class MoneyTest extends \PHPUnit_Framework_TestCase
         return [
             'convert to USD' => [new Money(1451, new ISO4217Currency('EUR')), 1.0567, 1533, 'USD'],
             //Test that factor of currency is adjusted properly
-            'convert CLP to EUR' => [new Money(	2333443, new ISO4217Currency('CLP')), (1.0 / 747.0), 312375, 'EUR'],
-            'convert EUR to CLP' => [new Money(	312375, new ISO4217Currency('EUR')), 747.0, 2333441, 'CLP'],
+            'convert CLP to EUR' => [new Money(2333443, new ISO4217Currency('CLP')), (1.0 / 747.0), 312375, 'EUR'],
+            'convert EUR to CLP' => [new Money(312375, new ISO4217Currency('EUR')), 747.0, 2333441, 'CLP'],
         ];
     }
 

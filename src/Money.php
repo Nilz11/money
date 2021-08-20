@@ -16,6 +16,9 @@ use Nilz\Money\Exception\CurrencyMismatchException;
  */
 class Money
 {
+    const ROUND_UP = 10;
+    const ROUND_DOWN = 11;
+
     /**
      * @var integer
      */
@@ -182,6 +185,12 @@ class Money
      */
     protected function round($amount, $mode = PHP_ROUND_HALF_UP)
     {
+        if ($mode === self::ROUND_UP) {
+            return (int)ceil($amount);
+        } else if ($mode === self::ROUND_DOWN) {
+            return (int)floor($amount);
+        }
+
         return (int)round($amount, 0, $mode);
     }
 
