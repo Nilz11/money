@@ -1,12 +1,15 @@
 <?php
 
-namespace NilzTest\PriceTag;
+namespace NilzTest\Money\PriceTag;
 
 use Nilz\Money\Currency\ISO4217Currency;
+use Nilz\Money\Exception\CurrencyMismatchException;
+use Nilz\Money\Exception\TaxMismatchException;
 use Nilz\Money\Money;
 use Nilz\Money\PriceTag\PriceTag;
+use PHPUnit\Framework\TestCase;
 
-class PriceTagTest extends \PHPUnit_Framework_TestCase
+class PriceTagTest extends TestCase
 {
 
     public function getConstructor()
@@ -55,10 +58,11 @@ class PriceTagTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getConstructorFailsWithDifferentCurrencies
-     * @expectedException \Nilz\Money\Exception\CurrencyMismatchException
      */
     public function testConstructorFailsWithDifferentCurrencies(Money $netPrice, Money $grossPrice)
     {
+        $this->expectException(CurrencyMismatchException::class);
+
         new PriceTag($netPrice, $grossPrice, 1234);
     }
 
@@ -79,10 +83,11 @@ class PriceTagTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getMethodFailsWithDifferentCurrencies
-     * @expectedException \Nilz\Money\Exception\CurrencyMismatchException
      */
     public function testMethodFailsWithDifferentCurrencies(PriceTag $priceTag, PriceTag $priceTag2, $method)
     {
+        $this->expectException(CurrencyMismatchException::class);
+
         $priceTag->$method($priceTag2);
     }
 
@@ -103,10 +108,11 @@ class PriceTagTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getMethodFailsWithDifferentTaxPercentages
-     * @expectedException \Nilz\Money\Exception\TaxMismatchException
      */
     public function testMethodFailsWithDifferentTaxPercentages(PriceTag $priceTag, PriceTag $priceTag2, $method)
     {
+        $this->expectException(TaxMismatchException::class);
+
         $priceTag->$method($priceTag2);
     }
 

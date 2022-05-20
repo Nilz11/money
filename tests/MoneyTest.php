@@ -5,14 +5,16 @@ namespace NilzTest\Money;
 use InvalidArgumentException;
 use Nilz\Money\Currency\Currency;
 use Nilz\Money\Currency\ISO4217Currency;
+use Nilz\Money\Exception\CurrencyMismatchException;
 use Nilz\Money\Money;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class MoneyTest
  *
  * @author Nilz
  */
-class MoneyTest extends \PHPUnit_Framework_TestCase
+class MoneyTest extends TestCase
 {
     public function getConstructionFailedAmount()
     {
@@ -26,10 +28,11 @@ class MoneyTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getConstructionFailedAmount
-     * @expectedException InvalidArgumentException
      */
     public function testConstructorFailsWithInvalidIntegerAmount($amount)
     {
+        $this->expectException(InvalidArgumentException::class);
+
         new Money($amount, new ISO4217Currency('EUR'));
     }
 
@@ -90,11 +93,10 @@ class MoneyTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($argument2Currency, $argument2->getCurrency());
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testOverflowingIntegerFails()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $money = new Money(PHP_INT_MAX, new ISO4217Currency('EUR'));
 
         $money->add(new Money(1, new ISO4217Currency('EUR')));
@@ -275,28 +277,31 @@ class MoneyTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getCurrencyMismatchData
-     * @expectedException \Nilz\Money\Exception\CurrencyMismatchException
      */
     public function testAddWithDifferentCurrenciesFails(Money $summand1, Money $summand2)
     {
+        $this->expectException(CurrencyMismatchException::class);
+
         $summand1->add($summand2);
     }
 
     /**
      * @dataProvider getCurrencyMismatchData
-     * @expectedException \Nilz\Money\Exception\CurrencyMismatchException
      */
     public function testSubtractWithDifferentCurrenciesFails(Money $minuend, Money $subtrahend)
     {
+        $this->expectException(CurrencyMismatchException::class);
+
         $minuend->subtract($subtrahend);
     }
 
     /**
      * @dataProvider getCurrencyMismatchData
-     * @expectedException \Nilz\Money\Exception\CurrencyMismatchException
      */
     public function testCompareToWithDifferentCurrenciesFails(Money $base, Money $compareObject)
     {
+        $this->expectException(CurrencyMismatchException::class);
+
         $base->compareTo($compareObject);
     }
 }

@@ -3,13 +3,14 @@
 namespace NilzTest\Money\Currency;
 
 use Nilz\Money\Currency\ISO4217Currency;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class CurrencyTest
  *
  * @author Nilz
  */
-class CurrencyTest extends \PHPUnit_Framework_TestCase
+class CurrencyTest extends TestCase
 {
     public function getCurrencyData()
     {
