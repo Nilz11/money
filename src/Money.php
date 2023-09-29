@@ -23,7 +23,7 @@ class Money
     /** @var Money[] */
     private ?array $currencies;
 
-    public function __construct(int $amount, CurrencyInterface $currency, ?array $currencies = [])
+    public function __construct(int $amount, CurrencyInterface $currency, array $currencies = [])
     {
         $this->amount = $amount;
         $this->currency = $currency;
