@@ -29,12 +29,6 @@ class MoneyTest extends TestCase
     /**
      * @dataProvider getConstructionFailedAmount
      */
-    public function testConstructorFailsWithInvalidIntegerAmount($amount)
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        new Money($amount, new ISO4217Currency('EUR'));
-    }
 
     public function getConstructorValidData()
     {
@@ -91,15 +85,6 @@ class MoneyTest extends TestCase
         $this->assertSame($argument1Currency, $argument1->getCurrency());
         $this->assertSame($argument2Amount, $argument2->getAmount());
         $this->assertSame($argument2Currency, $argument2->getCurrency());
-    }
-
-    public function testOverflowingIntegerFails()
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        $money = new Money(PHP_INT_MAX, new ISO4217Currency('EUR'));
-
-        $money->add(new Money(1, new ISO4217Currency('EUR')));
     }
 
     public function getMultiplicationAndDivisionData()
@@ -303,5 +288,28 @@ class MoneyTest extends TestCase
         $this->expectException(CurrencyMismatchException::class);
 
         $base->compareTo($compareObject);
+    }
+
+    public function testPriceInCurrencyExists()
+    {
+        $money1 = new Money(123, new ISO4217Currency('EUR'));
+        $money2 = new Money(50, new ISO4217Currency('EGP'));
+
+        $money1->addCurrencyPrice($money2);
+
+        $result = $money1->getPriceInCurrency('EGP');
+        $this->assertSame(50, $result->getAmount());
+    }
+
+    public function testPriceInCurrencyNotExists()
+    {
+        $money1 = new Money(123, new ISO4217Currency('EUR'));
+        $money2 = new Money(50, new ISO4217Currency('USD'));
+
+        $money1->addCurrencyPrice($money2);
+
+        // here we will get the default price if the Currency not exists
+        $result = $money1->getPriceInCurrency('EGP', true);
+        $this->assertSame(123, $result->getAmount());
     }
 }

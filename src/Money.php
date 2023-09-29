@@ -1,8 +1,7 @@
 <?php
-
+declare(strict_types=1);
 namespace Nilz\Money;
 
-use InvalidArgumentException;
 use Locale;
 use NumberFormatter;
 use Nilz\Money\Currency\CurrencyInterface;
@@ -18,29 +17,17 @@ class Money
 {
     const ROUND_UP = 10;
     const ROUND_DOWN = 11;
+    protected int $amount;
+    protected CurrencyInterface $currency;
 
-    /**
-     * @var integer
-     */
-    protected $amount;
+    /** @var Money[] */
+    private ?array $currencies;
 
-    /**
-     * @var CurrencyInterface
-     */
-    protected $currency;
-
-    /**
-     * @param integer           $amount
-     * @param CurrencyInterface $currency
-     */
-    public function __construct($amount, CurrencyInterface $currency)
+    public function __construct(int $amount, CurrencyInterface $currency, array $currencies = [])
     {
-        if (!is_int($amount)) {
-            throw new InvalidArgumentException("Money $amount must be valid integer");
-        }
-
         $this->amount = $amount;
         $this->currency = $currency;
+        $this->currencies = $currencies;
     }
 
     /**
@@ -132,7 +119,7 @@ class Money
     /**
      * @inheritdoc
      */
-    public function multiply($factor, $mode = PHP_ROUND_HALF_UP)
+    public function multiply($factor, $mode = PHP_ROUND_HALF_UP): Money
     {
         return $this->convertTo($factor, $this->currency, $mode);
     }
@@ -140,7 +127,7 @@ class Money
     /**
      * @inheritdoc
      */
-    public function divide($divisor, $mode = PHP_ROUND_HALF_UP)
+    public function divide($divisor, $mode = PHP_ROUND_HALF_UP): Money
     {
         $quotient = $this->round($this->amount / $divisor, $mode);
 
@@ -150,7 +137,7 @@ class Money
     /**
      * @inheritdoc
      */
-    public function convertTo($ratio, CurrencyInterface $currency, $mode = PHP_ROUND_HALF_UP)
+    public function convertTo($ratio, CurrencyInterface $currency, $mode = PHP_ROUND_HALF_UP): Money
     {
         $currencyFactor = $currency->getFactorOfSmallestUnit() / $this->currency->getFactorOfSmallestUnit();
 
@@ -162,7 +149,7 @@ class Money
     /**
      * @inheritdoc
      */
-    public function compareTo(Money $money)
+    public function compareTo(Money $money): int
     {
         $this->assertSameCurrency($money);
 
@@ -172,7 +159,7 @@ class Money
     /**
      * @inheritdoc
      */
-    public function newMoney($amount)
+    public function newMoney($amount): Money
     {
         return new static($amount, $this->currency);
     }
@@ -197,7 +184,7 @@ class Money
     /**
      * Returns number formatter class using the given locale
      *
-     * @param null|string $locale e.g. en_CA, defaults to Locale::getDefault()
+     * @param string|null $locale e.g. en_CA, defaults to Locale::getDefault()
      *
      * @return NumberFormatter
      */
@@ -227,5 +214,68 @@ class Money
             return false;
         }
         return true;
+    }
+
+    public function getPriceInCurrency(string $currency, bool $useDefault = false): ?Money
+    {
+        // Iterate through the currency prices and find the matching currency
+        foreach ($this->currencies as $price) {
+            if ($price->getCurrency()->getAlpha3() === $currency) {
+                return $price;
+            }
+        }
+
+        // If the currency is not found and $useDefault is true, return the default price
+        if ($useDefault) {
+            return $this;
+        }
+
+        // If the currency is not found and $useDefault is false, return null
+        return null;
+    }
+
+    public function getCurrencies(): ?array
+    {
+        return $this->currencies;
+    }
+
+    public function addCurrencyPrice(Money $price): void
+    {
+        $this->currencies[] = $price;
+    }
+
+    /**
+     * @param Money[] $currencies
+     */
+    public function setCurrencies(array $currencies): void
+    {
+        $this->currencies = $currencies;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'amount' => $this->getAmount(),
+            'currency' => $this->getCurrency()->getAlpha3(),
+            'currencies' => array_map(
+                fn ($price) => [
+                    'amount' => $price->getAmount(),
+                    'currency' => $price->getCurrency()->getAlpha3(),
+                ], $this->getCurrencies() ?? []
+            )
+        ];
+    }
+
+    public static function fromArray(array $value): Money
+    {
+        return new Money(
+            $value['amount'],
+            new ISO4217Currency($value['currency']),
+            array_map(fn ($price) => new Money(
+                (int) $price['amount'],
+                new ISO4217Currency($price['currency'])),
+                $value['currencies'] ?? []
+            )
+        );
     }
 }
