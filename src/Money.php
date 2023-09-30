@@ -143,7 +143,12 @@ class Money
 
         $product = $this->round($this->amount * $ratio * $currencyFactor, $mode);
 
-        return new static($product, $currency);
+        return new static($product, $currency,
+            array_map(
+                fn($money) => $money->convertTo($ratio, $money->getCurrency(), $mode),
+                $this->getCurrencies()
+            )
+        );
     }
 
     /**
@@ -161,7 +166,7 @@ class Money
      */
     public function newMoney($amount): Money
     {
-        return new static($amount, $this->currency);
+        return new static($amount, $this->currency, $this->currencies);
     }
 
     /**
