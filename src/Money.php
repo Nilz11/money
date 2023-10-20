@@ -220,7 +220,7 @@ class Money
     {
 
         if ($currency === $this->currency->getAlpha3()) {
-            return $this;
+            return new Money($this->amount, $this->currency);
         } 
 
         // Iterate through the currency prices and find the matching currency
@@ -232,7 +232,7 @@ class Money
 
         // If the currency is not found and $useDefault is true, return the default price
         if ($useDefault) {
-            return $this;
+            return new Money($this->amount, $this->currency);
         }
 
         // If the currency is not found and $useDefault is false, return null
