@@ -218,6 +218,11 @@ class Money
 
     public function getPriceInCurrency(string $currency, bool $useDefault = false): ?Money
     {
+
+        if ($currency === $this->currency->getAlpha3()) {
+            return $this;
+        } 
+
         // Iterate through the currency prices and find the matching currency
         foreach ($this->currencies as $price) {
             if ($price->getCurrency()->getAlpha3() === $currency) {
